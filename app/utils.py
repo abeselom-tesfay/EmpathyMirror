@@ -1,12 +1,12 @@
+import streamlit as st
 import cv2
 import numpy as np
 from keras.models import load_model as keras_load_model
 
-# Load the trained model
+@st.cache_resource
 def load_model():
     return keras_load_model("model/emotion_model.h5")
 
-# Preprocess the image: detect face, crop it, and resize
 def preprocess_image(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
@@ -15,7 +15,7 @@ def preprocess_image(image):
     if len(faces) == 0:
         return None
 
-    (x, y, w, h) = faces[0]  # Use the first detected face
+    (x, y, w, h) = faces[0]
     roi_gray = gray[y:y + h, x:x + w]
     roi_gray = cv2.resize(roi_gray, (48, 48))
     roi_gray = roi_gray.astype("float") / 255.0
@@ -23,13 +23,11 @@ def preprocess_image(image):
     roi_gray = np.expand_dims(roi_gray, axis=0)
     return roi_gray
 
-# Predict emotion from the preprocessed image
 def predict_emotion(face_img, model):
     predictions = model.predict(face_img)
     emotion_labels = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
     return emotion_labels[np.argmax(predictions)]
 
-# Emotion responses for display
 EMOTION_RESPONSES = {
     "angry": "😠 It's okay to feel angry. Take a deep breath.",
     "disgust": "🤢 Something feels off? Stay grounded and breathe.",
