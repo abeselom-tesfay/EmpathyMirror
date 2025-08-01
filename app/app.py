@@ -5,10 +5,8 @@ from PIL import Image
 from utils import load_model, preprocess_image, predict_emotion, EMOTION_RESPONSES
 from components import emotion_feedback_card
 
-# Page config must be the first Streamlit command
 st.set_page_config(page_title="Empathy Mirror", layout="wide")
 
-# --- Custom CSS for layout ---
 st.markdown("""
     <style>
     .app-container {
@@ -41,13 +39,11 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- Begin content within custom container ---
 st.markdown('<div class="app-container">', unsafe_allow_html=True)
 
 # --- Navbar ---
 st.markdown('<div class="navbar">Empathy Mirror</div>', unsafe_allow_html=True)
 
-# --- Top 50/50 Layout: Left = Description, Right = Input Method + Upload/Camera Controls ---
 col1, col2 = st.columns(2)
 
 with col1:
@@ -62,13 +58,11 @@ with col1:
 with col2:
     input_method = st.radio("Choose input method:", ("Camera", "Upload Image"))
 
-    # Controls now inside the right column
     if input_method == "Upload Image":
         uploaded_file = st.file_uploader("Upload a facial image", type=["jpg", "jpeg", "png"])
     else:
         run = st.checkbox("Start Camera")
 
-# --- Load model only once ---
 model = load_model()
 
 # --- Main Interaction Area ---
@@ -115,7 +109,7 @@ elif input_method == "Camera" and 'run' in locals() and run:
 
     camera.release()
 
-# --- User Feedback ---
+# --- Feedback ---
 feedback = st.radio("Did this reflection feel helpful to you?", ["👍 Yes", "👎 Not really"], index=None)
 if feedback:
     st.success("Thank you for your feedback 💙")
@@ -132,5 +126,4 @@ with st.expander("Why Empathy Mirror?"):
     - Demonstrate ethical interaction design in practice
     """)
 
-# --- End container ---
 st.markdown('</div>', unsafe_allow_html=True)
