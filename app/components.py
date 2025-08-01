@@ -21,21 +21,24 @@ def emotion_feedback_card(emotion: str, response: str):
         "disgust": "🤢"
     }
 
+    gif_map = {
+        "happy": "https://media.giphy.com/media/111ebonMs90YLu/giphy.gif",
+        "sad": "https://media.giphy.com/media/d2lcHJTG5Tscg/giphy.gif",
+        "angry": "https://media.giphy.com/media/l41YtZOb9EUABnuqA/giphy.gif",
+        "neutral": "https://media.giphy.com/media/3oEduNCSvS1BJ0U8xe/giphy.gif",
+        "surprise": "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif",
+        "fear": "https://media.giphy.com/media/3o7qE1YN7aBOFPRw8E/giphy.gif",
+        "disgust": "https://media.giphy.com/media/3oz8xPQ9pGU9q9Ph9K/giphy.gif",
+    }
+
     emotion = emotion.lower()
 
-    # Emotion card
     st.markdown(f"""
-        <div style="background-color:{color_map.get(emotion, '#F0F0F0')}; padding:20px; border-radius:15px; margin-top:20px;">
-            <h2 style="text-align:center;">{emoji_map.get(emotion, '💬')} {emotion.capitalize()}</h2>
-            <p style="text-align:center; font-size:18px;">{response}</p>
+        <div style="background-color:{color_map.get(emotion, '#F0F0F0')}; 
+                    padding:20px; border-radius:15px; margin-top:20px; text-align:center;">
+            <div style="font-size:60px;">{emoji_map.get(emotion, '💬')}</div>
+            <h2 style="margin-bottom:5px;">{emotion.capitalize()}</h2>
+            <p style="font-size:18px; margin-top:0;">{response}</p>
+            <img src="{gif_map.get(emotion)}" width="250" style="margin-top:15px;"/>
         </div>
     """, unsafe_allow_html=True)
-
-    # Add calming animation for negative emotions
-    if emotion in ["sad", "angry"]:
-        st.markdown("""
-            <div style="text-align:center; margin-top:20px;">
-                <img src="https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" width="250"/>
-                <p><em>Take a deep breath. Inhale... Exhale...</em></p>
-            </div>
-        """, unsafe_allow_html=True)
